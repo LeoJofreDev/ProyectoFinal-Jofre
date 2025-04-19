@@ -9,109 +9,147 @@
     <link rel="shortcut icon" href="/assets/icons/reloj.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <script defer src="/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>WorkPilot® | Asistente Laboral</title>
 </head>
 <body class="container-fluid">
     <header class="row" id="header">
-        <h1 class="animate__animated animate__lightSpeedInLeft col d-flex justify-content-end align-items-center">WorkPilot®</h1>
-        <h2 class="animate__animated animate__lightSpeedInRight col d-flex align-items-center text-start">Tu asistente en el trabajo</h2>
+        <h1 class="animate__animated animate__lightSpeedInLeft col d-flex justify-content-end align-items-center">
+            WorkPilot®</h1>
+        <h2 class="animate__animated animate__lightSpeedInRight col d-flex align-items-center text-start">Tu asistente
+            en el trabajo</h2>
     </header>
     <main class="row">
-        <!-- MARCAR ENTRADA -->
-        <div class="col-4">
-            <div class="d-flex justify-content-center align-items-center">
-                <img src="/assets/icons/entrar.png" alt="icono de ingreso" class="iconosIndex">
-                <span>Marcar entrada</span>
-            </div>
-            <div class="d-flex flex-column justify-content-center align-items-center">
-                <label for="nombreEmpleadoCargado">Nombre empleado:
-                    <input type="text" name="nombre empleado" id="nombreEmpleadoCargado">
-                </label>
-                <span id="mensajeValidacion" style="color: red; margin-top: 5px;"></span>
-                <button id="validarEmpleado" onclick="guardarNombre(), guardarFechaHoraEntrada()">INGRESAR</button>
-            </div>
-        </div>
-        <!-- RELOJ 1 Y LISTA DE EMPLEADOS CARGADOS-->
-        <div class="col-4">
-            <div class="d-flex flex-column justify-content-center align-items-center">
-                <img src="/assets/icons/reloj.png" alt="icono de reloj" class="iconosIndex">
-                <span id="fechaHora"></span>
-            </div>
-            <div class="d-flex flex-column justify-content-center align-items-center">
-                <button data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    Ver lista de empleados
-                </button>
-                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Empleados cargados:</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <ul id="empleadosCargados">
-                                    <li></li>
-                                </ul>
+        <div class="col-8">
+            <div class="row">
+                <!-- MARCAR ENTRADA -->
+                <div class="col-6">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img src="/assets/icons/entrar.png" alt="icono de ingreso" class="iconosIndex">
+                        <span>Marcar entrada</span>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <label for="nombreEmpleadoCargado">Nombre empleado:
+                            <input type="text" name="nombre empleado" id="nombreEmpleadoCargado">
+                        </label>
+                        <span id="mensajeValidacion" style="color: red; margin-top: 5px;"></span>
+                        <button id="validarEmpleado"
+                            onclick="guardarNombre(), guardarFechaHoraEntrada()">INGRESAR</button>
+                    </div>
+                </div>
+                <!-- RELOJ 1 Y LISTA DE EMPLEADOS CARGADOS-->
+                <div class="col-6">
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <img src="/assets/icons/reloj.png" alt="icono de reloj" class="iconosIndex">
+                        <span id="fechaHora"></span>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <button data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Ver lista de empleados
+                        </button>
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Empleados cargados:</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <ul id="empleadosCargados">
+                                            <li></li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <!-- AÑADIR / ELIMINAR EMPLEADOS -->
+                <hr>
+                <h4 class="text-center">Sólo acceso autorizado:</h4>
+                <br>
+                <div class="col-6">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img src="/assets/icons/registrar_usuario.png" alt="icono añadir usuario" class="iconosIndex">
+                        <span>Añadir empleado</span>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <label for="nombreEmpleado">Nombre empleado:
+                            <input type="text" name="nombre empleado" id="nombreEmpleado">
+                        </label>
+                        <input type="password" id="contraseñaAgregar" placeholder="Ingresa contraseña 1234"
+                            autocomplete="current-password">
+                        <span id="mensajeExitoAgregar" style="color: green; margin-top: 1px;"></span>
+                        <button id="agregarEmpleado">AGREGAR</button>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img src="/assets/icons/retire_usuario.png" alt="icono eliminar usuario">
+                        <span>Eliminar empleado</span>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <form class="d-flex flex-column justify-content-center align-items-center"
+                            onsubmit="return false;">
+                            <label for="nombreEmpleadoEliminar">Nombre empleado:
+                                <input type="text" name="nombre empleado" id="nombreEmpleadoEliminar"
+                                    autocomplete="off">
+                            </label>
+                            <input type="password" id="contraseña" placeholder="Ingresa contraseña 1234"
+                                autocomplete="current-password">
+                            <span id="mensajeError" style="color: red; margin-left: 10px;"></span>
+                            <span id="mensajeEmpleado" style="color: red;"></span>
+                            <span id="mensajeExito" style="color: green;"></span>
+                            <button id="borrarEmpleado" type="button">BORRAR</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- AÑADIR / ELIMINAR EMPLEADOS -->
         <div class="col-4">
-            <div class="d-flex justify-content-center align-items-center">
-                <img src="/assets/icons/registrar_usuario.png" alt="icono añadir usuario" class="iconosIndex">
-                <span>Añadir empleado</span>
+            <div class="row col-auto">
+                <div class="d-flex justify-content-center flex-column">
+                    <h2 class="text-center">NOMBRE DE LA EMPRESA/LOGO O ENCABEZADO</h2>
+                    <h4 class="text-center">Breve descripción de la empresa</h4>
+                    <h5 class="text-center">Enlace a contacto o soporte. Panel administrativo. Gestión documental. Notificaciones y alertas. Integración con correo coorporativo, slack y Google Calendar. Registro mediante PIN, huella digital o reconocimiento facial. Solicitudes internas. Reportes.</h5>
+                    <h6 class="text-center">... y mucho más.</h6>
+                </div>
             </div>
-            <div class="d-flex flex-column justify-content-center align-items-center">
-                <label for="nombreEmpleado">Nombre empleado:
-                    <input type="text" name="nombre empleado" id="nombreEmpleado">
-                </label>
-                <span id="mensajeExitoAgregar" style="color: green; margin-top: 10px;"></span>
-                <button id="agregarEmpleado">AGREGAR</button>
-            </div>
-            <br>
-            <div class="d-flex justify-content-center align-items-center">
-                <img src="/assets/icons/retire_usuario.png" alt="icono eliminar usuario">
-                <span>Eliminar empleado</span>
-            </div>
-            <div class="d-flex flex-column justify-content-center align-items-center">
-                <form class="d-flex flex-column justify-content-center align-items-center" onsubmit="return false;">
-                    <label for="nombreEmpleadoEliminar">Nombre empleado:
-                        <input type="text" name="nombre empleado" id="nombreEmpleadoEliminar" autocomplete="off">
-                    </label>
-                    <input type="password" id="contraseña" placeholder="Ingresa contraseña 1234" autocomplete="current-password">
-                    <span id="mensajeError" style="color: red; margin-left: 10px;"></span>
-                    <span id="mensajeEmpleado" style="color: red;"></span>
-                    <span id="mensajeExito" style="color: green;"></span>
-                    <button id="borrarEmpleado" type="button">BORRAR</button>
-                </form>
-            </div>
-        </div>
-        <!-- INFORMACIÓN SOBRE LA APLICACIÓN WEB -->
-        <div class="row d-flex justify-content-center">
-            <div>
-                <hr>
-                <h5 class="d-flex justify-content-center">WorkPilot® es un asistente virtual diseñado para optimizar la
-                    gestión
-                    laboral.</h5>
-            </div>
-            <div>
-                <p class="d-flex text-center">Es una herramienta ideal para mejorar la productividad y la organización en
-                    entornos laborales. Actualmente, se encuentra en fase de desarrollo, con un enfoque en ofrecer
-                    funcionalidades innovadoras y de alto impacto en el futuro. Se espera integrar herramientas más
-                    avanzadas,
-                    como análisis predictivo, personalización inteligente y una interfaz aún más intuitiva, para garantizar
-                    que
-                    WorkPilot® siga evolucionando como una solución de referencia en la gestión laboral.</p>
-                <hr>
+            <div class="row col-12">
+                <!-- INFORMACIÓN SOBRE LA APLICACIÓN WEB -->
+                <div class="row text-center justify-content-center">
+                    <div>
+                        <h5 class="d-flex justify-content-center">WorkPilot® es un asistente virtual diseñado para
+                            optimizar la
+                            gestión
+                            laboral.</h5>
+                    </div>
+                    <div>
+                        <p class="d-flex text-center">Es una herramienta ideal para mejorar la productividad y la
+                            organización en
+                            entornos laborales. Actualmente, se encuentra en fase de desarrollo, con un enfoque en
+                            ofrecer
+                            funcionalidades innovadoras y de alto impacto en el futuro. Se espera integrar herramientas
+                            más
+                            avanzadas,
+                            como análisis predictivo, personalización inteligente y una interfaz aún más intuitiva, para
+                            garantizar
+                            que
+                            WorkPilot® siga evolucionando como una solución de referencia en la gestión laboral.</p>
+                    </div>
+                </div>
             </div>
         </div>
+        <hr>
     </main>
     <footer class="row">
-        <p class="d-flex justify-content-center">WorkPilot® | Entrega final módulo Javascript, CODERHOUSE | Diseño y desarrollo: Leonardo Jofré</p>
+        <p class="d-flex justify-content-center">WorkPilot® | Entrega final módulo Javascript, CODERHOUSE | Diseño y
+            desarrollo: Leonardo Jofré</p>
     </footer>
 </body>
+
 </html>

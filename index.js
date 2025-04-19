@@ -29,7 +29,7 @@ const mensajeError = document.getElementById('mensajeError');
 const mensajeEmpleado = document.getElementById('mensajeEmpleado');
 const mensajeExito = document.getElementById('mensajeExito');
 
-/* Datos de empleados cargados desde JSON Placeholder. Endpoint para usuarios: https://jsonplaceholder.typicode.com/users */
+/* Nombres de empleados cargados desde JSON Placeholder. Endpoint para usuarios: https://jsonplaceholder.typicode.com/users */
 
 /* Función para mostrar los empleados en la lista */
 const mostrarEmpleados = (empleados) => {
@@ -67,13 +67,38 @@ const cargarEmpleados = async () => {
 /* Función para agregar un nuevo empleado */
 function agregarEmpleado() {
     const nombre = inputEmpleado.value.trim();
+    const contraseñaIngresada = document.getElementById('contraseñaAgregar').value.trim();
+
+    if (contraseñaIngresada !== '1234') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Acceso denegado',
+            text: 'La contraseña es incorrecta. Inténtalo de nuevo.'
+        });
+        return;
+    }
 
     if (!nombre) {
-        mensajeExitoAgregar.textContent = 'Por favor ingresa un nombre válido.';
+        Swal.fire({
+            icon: 'warning',
+            title: 'Falta información',
+            text: 'Por favor ingresa un nombre válido.'
+        });
         return;
     }
 
     const empleados = JSON.parse(localStorage.getItem('empleados')) || [];
+
+    const existeEmpleado = empleados.some(empleado => empleado.name.toLowerCase() === nombre.toLowerCase());
+    if (existeEmpleado) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Empleado duplicado',
+            text: 'El empleado ya se encuentra en la lista.'
+        });
+        return;
+    }
+
     const nuevoEmpleado = {
         id: empleados.length + 1,
         name: nombre,
@@ -82,13 +107,18 @@ function agregarEmpleado() {
 
     empleados.push(nuevoEmpleado);
     localStorage.setItem('empleados', JSON.stringify(empleados));
-    mensajeExitoAgregar.textContent = `${nombre} ha sido agregado exitosamente.`;
     mostrarEmpleados(empleados);
 
+    Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Empleado agregado exitosamente",
+        showConfirmButton: false,
+        timer: 1500
+    });
+
     inputEmpleado.value = '';
-    setTimeout(() => {
-        mensajeExitoAgregar.textContent = '';
-    }, 3000);
+    document.getElementById('contraseñaAgregar').value = '';
 }
 
 /* Función para eliminar un empleado */
@@ -96,16 +126,12 @@ const borrarEmpleado = () => {
     const nombre = inputEmpleadoEliminar.value.trim();
     const contraseña = inputContraseña.value.trim();
 
-    mensajeError.textContent = '';
-    mensajeEmpleado.textContent = '';
-    mensajeExito.textContent = '';
-
-    // Validar contraseña
     if (contraseña !== '1234') {
-        mensajeError.textContent = 'Contraseña incorrecta.';
-        setTimeout(() => {
-            mensajeError.textContent = '';
-        }, 3000);
+        Swal.fire({
+            icon: 'error',
+            title: 'Acceso denegado',
+            text: 'La contraseña es incorrecta. Inténtalo de nuevo.'
+        });
         return;
     }
 
@@ -113,19 +139,35 @@ const borrarEmpleado = () => {
     const index = empleados.findIndex(empleado => empleado.name.toLowerCase() === nombre.toLowerCase());
 
     if (index !== -1) {
-        empleados.splice(index, 1);
-        localStorage.setItem('empleados', JSON.stringify(empleados));
-        mostrarEmpleados(empleados);
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: `Eliminarás al empleado "${nombre}". Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                empleados.splice(index, 1);
+                localStorage.setItem('empleados', JSON.stringify(empleados));
+                mostrarEmpleados(empleados);
 
-        mensajeExito.textContent = `${nombre} ha sido eliminado exitosamente.`;
-        setTimeout(() => {
-            mensajeExito.textContent = '';
-        }, 3000);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: `El empleado "${nombre}" ha sido eliminado exitosamente`,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        });
     } else {
-        mensajeEmpleado.textContent = `El empleado ${nombre} no se encuentra en la lista.`;
-        setTimeout(() => {
-            mensajeEmpleado.textContent = '';
-        }, 3000);
+        Swal.fire({
+            icon: 'info',
+            title: 'Empleado no encontrado',
+            text: `No se encontró ningún empleado con el nombre "${nombre}". Verifica e inténtalo nuevamente.`
+        });
     }
 
     inputEmpleadoEliminar.value = '';
@@ -133,9 +175,9 @@ const borrarEmpleado = () => {
 };
 
 /* Eventos */
-document.addEventListener('DOMContentLoaded', cargarEmpleados); // Cargar empleados al iniciar la página
-botonAgregar.addEventListener('click', agregarEmpleado); // Añadir nuevo empleado
-botonBorrar.addEventListener('click', borrarEmpleado); // Eliminar empleado al hacer clic
+document.addEventListener('DOMContentLoaded', cargarEmpleados);
+botonAgregar.addEventListener('click', agregarEmpleado);
+botonBorrar.addEventListener('click', borrarEmpleado);
 
 // Cargar los datos al iniciar la página
 document.addEventListener('DOMContentLoaded', cargarEmpleados);
@@ -170,7 +212,6 @@ function guardarFechaHoraEntrada() {
     if (fechaHoraElemento) {
         const fechaHora = fechaHoraElemento.textContent;
         localStorage.setItem('fechaHoraEntrada', fechaHora);
-        console.log("Fecha y hora de entrada guardada:", fechaHora);
     } else {
         console.error("El span #fechaHora no está disponible.");
     }
@@ -179,9 +220,7 @@ function guardarFechaHoraEntrada() {
 function guardarNombre() {
     const nombre = document.getElementById('nombreEmpleadoCargado').value.trim();
     if (!nombre) {
-        alert("Por favor, ingresa un nombre válido.");
         return;
     }
     localStorage.setItem('nombreEmpleado', nombre);
-    console.log("Nombre guardado:", nombre); 
 }

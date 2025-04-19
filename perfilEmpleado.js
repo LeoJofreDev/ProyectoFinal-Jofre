@@ -91,7 +91,6 @@ function guardarSalida() {
     localStorage.setItem(`salidas_${nombreValidado}`, JSON.stringify(salidas));
 
     localStorage.removeItem('fechaHoraEntrada');
-    console.log("Salida registrada y fechaHoraEntrada eliminada.");
     window.location.href = '/index.html';
 }
 
